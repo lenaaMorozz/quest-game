@@ -1,4 +1,4 @@
-package com.mer.questgame;
+package com.mer.questgame.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class Player {
     private String name;
-    private int quantityGames;
+    private int quantityGames = 1;
 }
