@@ -2,8 +2,6 @@ package com.mer.questgame.servlets;
 
 import com.mer.questgame.model.Player;
 import com.mer.questgame.model.QuestionTreeNode;
-import com.mer.questgame.model.Repository;
-import com.mer.questgame.model.RepositoryLinkedList;
 import lombok.extern.log4j.Log4j2;
 
 import javax.servlet.ServletException;
@@ -27,26 +25,21 @@ public class LogicServlet extends HttpServlet {
         Player player= (Player) httpSession.getAttribute("player");
         if (player.getName() == null) {
             player.setName(request.getParameter("username"));
+            httpSession.setAttribute("username", player.getName());
             log.info("Username - {}", player.getName());
         }
 
         player.setQuantityGames(player.getQuantityGames());
-
-        httpSession.setAttribute("username", player.getName());
         httpSession.setAttribute("quantityGames", player.getQuantityGames());
 
+        getAnswer(request, extractQuestionTreeNode(httpSession), httpSession);
         QuestionTreeNode questionTreeNode = extractQuestionTreeNode(httpSession);
 
-        f(request, questionTreeNode, httpSession);
+        String question = extractQuestionTreeNode(httpSession).getContext();
 
-        extractQuestionTreeNode(httpSession);
-
-        String question = questionTreeNode.getContext();
         httpSession.setAttribute("question", question);
         httpSession.setAttribute("firstAnswer", questionTreeNode.getCorrectAnswer());
         httpSession.setAttribute("secondAnswer", questionTreeNode.getWrongAnswer());
-
-
 
         request.getRequestDispatcher("/game.jsp").forward(request, response);
 
@@ -56,14 +49,18 @@ public class LogicServlet extends HttpServlet {
         return (QuestionTreeNode) httpSessions.getAttribute("questionTreeNode");
     }
 
-    private void f(HttpServletRequest request, QuestionTreeNode questionTreeNode, HttpSession httpSession) {
+    private void getAnswer(HttpServletRequest request, QuestionTreeNode questionTreeNode, HttpSession httpSession) {
         String answer = request.getParameter("answer");
         if (answer != null) {
             log.info("answer - {}", answer);
             if (answer.equals("first")) {
                 httpSession.setAttribute("questionTreeNode", questionTreeNode.getFirst());
+                httpSession.setAttribute("gameIsOver", questionTreeNode.getFirst().isGameIsOver());
+
             } else {
                 httpSession.setAttribute("questionTreeNode", questionTreeNode.getSecond());
+                httpSession.setAttribute("gameIsOver", questionTreeNode.getSecond().isGameIsOver());
+
             }
         }
     }

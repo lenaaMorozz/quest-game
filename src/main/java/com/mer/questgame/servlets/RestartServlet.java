@@ -2,7 +2,6 @@ package com.mer.questgame.servlets;
 
 import com.mer.questgame.model.Player;
 import com.mer.questgame.model.QuestionTreeNode;
-import com.mer.questgame.model.Repository;
 import com.mer.questgame.model.RepositoryLinkedList;
 import lombok.extern.log4j.Log4j2;
 
@@ -14,21 +13,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "InitServlet", value = "/start")
+@WebServlet(name = "RestartServlet", value = "/restart")
 @Log4j2
-public class InitServlet extends HttpServlet {
-
+public class RestartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession httpSession = request.getSession(true);
-        log.info("Create session {}", httpSession.getId());
+        HttpSession httpSession = request.getSession();
 
-        Player player = new Player();
-        httpSession.setAttribute("player", player);
+        Player player = (Player) httpSession.getAttribute("player");
+        player.setQuantityGames(player.getQuantityGames() + 1);
+        log.info("{} started {} game", player.getName(), player.getQuantityGames());
 
         QuestionTreeNode questionTreeNode = new RepositoryLinkedList().getQuestionTreeNode();
         httpSession.setAttribute("questionTreeNode", questionTreeNode);
-
-        getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+        httpSession.setAttribute("gameIsOver", false);
+        response.sendRedirect("/game");
     }
 }

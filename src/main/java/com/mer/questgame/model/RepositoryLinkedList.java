@@ -21,10 +21,11 @@ public class RepositoryLinkedList implements Repository {
         int j = 0;
         for (int i = context.size() - 1; i >= 0; i--) {
             if (questions.size() < 2) {
-                questions.add(new QuestionTreeNode( context.get(i), answers.get(i - 1), answers.get(i - 2), null, null,
-                        false));
+                questions.add(new QuestionTreeNode( context.get(i), answers.get(i * 2), answers.get(i * 2 + 1), null,
+                        null, true));
             } else if (i % 2 != 0) {
-                questions.add(new QuestionTreeNode(context.get(i), "", "", null, null, true));
+                questions.add(new QuestionTreeNode(context.get(i), "", "", null, null,
+                        true));
             } else {
                 questions.add(new QuestionTreeNode(context.get(i), answers.get(i * 2), answers.get(i * 2 + 1),
                         questions.get(j), questions.get(j + 1), false));

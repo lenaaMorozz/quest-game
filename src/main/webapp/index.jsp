@@ -13,7 +13,6 @@
 <form method="GET" action="game">
     <input type="text" name="username"/>
     <input type="submit" value="Дальше"/>
-
 </form>
 </body>
 </html>
