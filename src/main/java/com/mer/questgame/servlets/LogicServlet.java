@@ -16,13 +16,11 @@ import java.io.IOException;
 @Log4j2
 public class LogicServlet extends HttpServlet {
 
-
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession httpSession = request.getSession();
 
-        Player player= (Player) httpSession.getAttribute("player");
+        Player player = (Player) httpSession.getAttribute("player");
         if (player.getName() == null) {
             player.setName(request.getParameter("username"));
             httpSession.setAttribute("username", player.getName());
@@ -32,7 +30,7 @@ public class LogicServlet extends HttpServlet {
         player.setQuantityGames(player.getQuantityGames());
         httpSession.setAttribute("quantityGames", player.getQuantityGames());
 
-        getAnswer(request, extractQuestionTreeNode(httpSession), httpSession);
+        getAnswerAndSetAttribute(request, extractQuestionTreeNode(httpSession), httpSession);
         QuestionTreeNode questionTreeNode = extractQuestionTreeNode(httpSession);
 
         String question = extractQuestionTreeNode(httpSession).getContext();
@@ -45,11 +43,11 @@ public class LogicServlet extends HttpServlet {
 
     }
 
-    private QuestionTreeNode extractQuestionTreeNode(HttpSession httpSessions) {
+    QuestionTreeNode extractQuestionTreeNode(HttpSession httpSessions) {
         return (QuestionTreeNode) httpSessions.getAttribute("questionTreeNode");
     }
 
-    private void getAnswer(HttpServletRequest request, QuestionTreeNode questionTreeNode, HttpSession httpSession) {
+    void getAnswerAndSetAttribute(HttpServletRequest request, QuestionTreeNode questionTreeNode, HttpSession httpSession) {
         String answer = request.getParameter("answer");
         if (answer != null) {
             log.info("answer - {}", answer);
@@ -64,5 +62,4 @@ public class LogicServlet extends HttpServlet {
             }
         }
     }
-
 }

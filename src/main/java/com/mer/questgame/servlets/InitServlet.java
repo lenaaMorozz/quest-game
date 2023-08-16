@@ -2,8 +2,7 @@ package com.mer.questgame.servlets;
 
 import com.mer.questgame.model.Player;
 import com.mer.questgame.model.QuestionTreeNode;
-import com.mer.questgame.model.Repository;
-import com.mer.questgame.model.RepositoryLinkedList;
+import com.mer.questgame.model.repository.RepositoryLinkedList;
 import lombok.extern.log4j.Log4j2;
 
 import javax.servlet.ServletException;
@@ -26,7 +25,7 @@ public class InitServlet extends HttpServlet {
         Player player = new Player();
         httpSession.setAttribute("player", player);
 
-        QuestionTreeNode questionTreeNode = new RepositoryLinkedList().getQuestionTreeNode();
+        QuestionTreeNode questionTreeNode = new RepositoryLinkedList().getFirstQuestionTreeNode();
         httpSession.setAttribute("questionTreeNode", questionTreeNode);
 
         getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
