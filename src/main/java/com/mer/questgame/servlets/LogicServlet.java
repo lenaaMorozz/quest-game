@@ -43,11 +43,11 @@ public class LogicServlet extends HttpServlet {
 
     }
 
-    QuestionTreeNode extractQuestionTreeNode(HttpSession httpSessions) {
+    private QuestionTreeNode extractQuestionTreeNode(HttpSession httpSessions) {
         return (QuestionTreeNode) httpSessions.getAttribute("questionTreeNode");
     }
 
-    void getAnswerAndSetAttribute(HttpServletRequest request, QuestionTreeNode questionTreeNode, HttpSession httpSession) {
+    private void getAnswerAndSetAttribute(HttpServletRequest request, QuestionTreeNode questionTreeNode, HttpSession httpSession) {
         String answer = request.getParameter("answer");
         if (answer != null) {
             log.info("answer - {}", answer);
